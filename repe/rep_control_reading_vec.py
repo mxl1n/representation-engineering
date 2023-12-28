@@ -142,14 +142,14 @@ class WrappedReadingVecModel(torch.nn.Module):
 
     def wrap(self, layer_id, block_name):
         assert block_name in BLOCK_NAMES
-        # if self.is_wrapped(self.model.model.layers[layer_id]):
-        #     block = getattr(self.model.model.layers[layer_id].block, block_name)
-        #     if not self.is_wrapped(block):
-        #         setattr(self.model.model.layers[layer_id].block, block_name, WrappedBlock(block))
-        # else:
-        #     block = getattr(self.model.model.layers[layer_id], block_name)
-        #     if not self.is_wrapped(block):
-        #         setattr(self.model.model.layers[layer_id], block_name, WrappedBlock(block))
+        if self.is_wrapped(self.model.model.layers[layer_id]):
+            block = getattr(self.model.model.layers[layer_id].block, block_name)
+            if not self.is_wrapped(block):
+                setattr(self.model.model.layers[layer_id].block, block_name, WrappedBlock(block))
+        else:
+            block = getattr(self.model.model.layers[layer_id], block_name)
+            if not self.is_wrapped(block):
+                setattr(self.model.model.layers[layer_id], block_name, WrappedBlock(block))
 
     def wrap_decoder_block(self, layer_id):
         block = self.model.model.layers[layer_id]
