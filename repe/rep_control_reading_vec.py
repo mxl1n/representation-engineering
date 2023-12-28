@@ -267,8 +267,8 @@ class WrappedReadingVecModel(torch.nn.Module):
         for l, layer in enumerate(self.model.model.layers):
             if self.is_wrapped(layer):
                 self.model.model.layers[l] = layer.block
-            for block_name in BLOCK_NAMES:
-                if self.is_wrapped(getattr(self.model.model.layers[l], block_name)):
-                    setattr(self.model.model.layers[l],
-                            block_name,
-                            getattr(self.model.model.layers[l], block_name).block)
+            # for block_name in BLOCK_NAMES:
+            #     if self.is_wrapped(getattr(self.model.model.layers[l], block_name)):
+            #         setattr(self.model.model.layers[l],
+            #                 block_name,
+            #                 getattr(self.model.model.layers[l], block_name).block)
