@@ -142,14 +142,14 @@ class WrappedReadingVecModel(torch.nn.Module):
 
     def wrap(self, layer_id, block_name):
         assert block_name in BLOCK_NAMES
-        if self.is_wrapped(self.model.model.layers[layer_id]):
-            block = getattr(self.model.model.layers[layer_id].block, block_name)
-            if not self.is_wrapped(block):
-                setattr(self.model.model.layers[layer_id].block, block_name, WrappedBlock(block))
-        else:
-            block = getattr(self.model.model.layers[layer_id], block_name)
-            if not self.is_wrapped(block):
-                setattr(self.model.model.layers[layer_id], block_name, WrappedBlock(block))
+        # if self.is_wrapped(self.model.model.layers[layer_id]):
+        #     block = getattr(self.model.model.layers[layer_id].block, block_name)
+        #     if not self.is_wrapped(block):
+        #         setattr(self.model.model.layers[layer_id].block, block_name, WrappedBlock(block))
+        # else:
+        #     block = getattr(self.model.model.layers[layer_id], block_name)
+        #     if not self.is_wrapped(block):
+        #         setattr(self.model.model.layers[layer_id], block_name, WrappedBlock(block))
 
     def wrap_decoder_block(self, layer_id):
         block = self.model.model.layers[layer_id]
@@ -267,8 +267,8 @@ class WrappedReadingVecModel(torch.nn.Module):
         for l, layer in enumerate(self.model.model.layers):
             if self.is_wrapped(layer):
                 self.model.model.layers[l] = layer.block
-            # for block_name in BLOCK_NAMES:
-            #     if self.is_wrapped(getattr(self.model.model.layers[l], block_name)):
-            #         setattr(self.model.model.layers[l],
-            #                 block_name,
-            #                 getattr(self.model.model.layers[l], block_name).block)
+            for block_name in BLOCK_NAMES:
+                if self.is_wrapped(getattr(self.model.model.layers[l], block_name)):
+                    setattr(self.model.model.layers[l],
+                            block_name,
+                            getattr(self.model.model.layers[l], block_name).block)
